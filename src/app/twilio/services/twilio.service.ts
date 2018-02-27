@@ -18,7 +18,7 @@ export class TwilioService {
   constructor(private http: HttpClient) {}
 
   getToken(username): Observable<any> {
-    return this.http.post('https://us-central1-hellostranger-89f87.cloudfunctions.net/get_token', { uid: username });
+    return this.http.post('url', { uid: username });
   }
 
   connectToRoom(accessToken: string, options): void {
