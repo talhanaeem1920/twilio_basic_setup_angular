@@ -6,7 +6,7 @@ import { connect, createLocalTracks, createLocalVideoTrack } from 'twilio-video'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
-@Injectable()
+@Injectable() 
 export class TwilioService {
 
   remoteVideo: ElementRef;
@@ -15,17 +15,13 @@ export class TwilioService {
   msgSubject = new BehaviorSubject("");
   roomObj: any;
 
-  constructor(private http: HttpClient) {}
-
-  getToken(username): Observable<any> {
-    return this.http.post('url', { uid: username });
-  }
+  constructor() {}
 
   connectToRoom(accessToken: string, options): void {
     connect(accessToken, options).then(room => {
 
       this.roomObj = room;
-
+      console.log(room);
       if (!this.previewing && options['video']) {
         this.startLocalVideo();
         this.previewing = true;
@@ -45,6 +41,7 @@ export class TwilioService {
       });
 
       room.on('participantConnected',  (participant) => {
+        console.log(participant);
         participant.tracks.forEach(track => {
           this.remoteVideo.nativeElement.appendChild(track.attach());
         });
@@ -71,8 +68,8 @@ export class TwilioService {
       room.once('disconnected',  room => {
         this.msgSubject.next('You left the Room:' + room.name);
         room.localParticipant.tracks.forEach(track => {
-          var attachedElements = track.detach();
-          attachedElements.forEach(element => element.remove());
+          // var attachedElements = track.detach();
+          // attachedElements.forEach(element => element.remove());
         });
       });
     });
@@ -108,9 +105,9 @@ export class TwilioService {
 
   detachTracks(tracks): void {
     tracks.forEach(function (track) {
-      track.detach().forEach(function (detachedElement) {
-        detachedElement.remove();
-      });
+      // track.detach().forEach(function (detachedElement) {
+      //   detachedElement.remove();
+      // });
     });
   }
 

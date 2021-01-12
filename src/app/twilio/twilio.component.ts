@@ -43,23 +43,25 @@ export class TwilioComponent implements OnInit {
 
   connect(): void {
     let storage = JSON.parse(localStorage.getItem('token') || '{}');
+    this.twilioService.connectToRoom(this.username, { name: this.roomName, audio: true, video: { width: 440, } })
+
     let date = Date.now();
     if (!this.roomName || !this.username) { this.message = "enter username and room name."; return;}
     if (storage['token'] && storage['created_at'] + 3600000 > date) {
       this.accessToken = storage['token'];
-      this.twilioService.connectToRoom(this.accessToken, { name: this.roomName, audio: true, video: { width: 240 } })
       return;
     }
-    this.twilioService.getToken(this.username).subscribe(d => {
-      this.accessToken = d['token'];
-      localStorage.setItem('token', JSON.stringify({
-        token: this.accessToken,
-        created_at: date
-      }));
-      this.twilioService.connectToRoom(this.accessToken, { name: this.roomName, audio: true, video: { width: 240 } })
-    },
-      error => this.log(JSON.stringify(error)));
+  //   this.twilioService.getToken(this.username).subscribe(d => {
+  //     this.accessToken = d['token'];
+  //     localStorage.setItem('token', JSON.stringify({
+  //       token: this.accessToken,
+  //       created_at: date
+  //     }));
+  //     this.twilioService.connectToRoom(this.accessToken, { name: this.roomName, audio: true, video: { width: 240 } })
+  //   },
+  //     error => this.log(JSON.stringify(error)));
 
+  // }
   }
 
 }
